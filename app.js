@@ -1,30 +1,63 @@
 // ============================================================
 //  Panel de Servicios — lógica
-//  Persistencia: localStorage. Export/Import: JSON.
+//  Persistencia: Supabase (nube, compartido) + localStorage (caché).
+//  Export/Import: JSON.
 // ============================================================
 
 const STORAGE_KEY = "panel-servicios-v1";
 
-let state = load();
+let state = loadCache();
 let activeId = state.servicios[0]?.id || null;
 let editing = false;
 
-// ---------- Persistencia ----------
-function load() {
+// ---------- Caché local (render inmediato + offline) ----------
+function loadCache() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) return JSON.parse(saved);
   } catch (e) {}
   return structuredClone(DATA_DEFAULT);
 }
-function save() {
+
+// ---------- Guardar: nube + caché ----------
+async function save() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  flashSaved();
+  setStatus("Guardando…");
+  try {
+    await cloudSave(state);
+    setStatus("✓ Guardado en la nube", 2000);
+  } catch (e) {
+    setStatus("⚠ Sin conexión: guardado solo local", 3500);
+    console.error("cloudSave error", e);
+  }
 }
-function flashSaved() {
+
+// ---------- Cargar desde la nube al iniciar / al volver a la pestaña ----------
+async function syncFromCloud() {
+  try {
+    const remote = await cloudLoad();
+    if (remote && remote.servicios) {
+      state = remote;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      if (!getService(activeId)) activeId = state.servicios[0]?.id || null;
+      if (!editing) render();
+      setStatus("✓ Sincronizado", 1500);
+    } else {
+      // No hay registro todavía: sembramos el contenido actual.
+      await cloudSave(state);
+    }
+  } catch (e) {
+    setStatus("⚠ Mostrando copia local (sin conexión)", 3500);
+    console.error("cloudLoad error", e);
+  }
+}
+
+function setStatus(msg, resetMs) {
   const el = document.getElementById("saveState");
-  el.textContent = "✓ Cambios guardados";
-  setTimeout(() => (el.textContent = "Cambios guardados en este navegador"), 1500);
+  if (!el) return;
+  el.textContent = msg;
+  if (resetMs)
+    setTimeout(() => (el.textContent = "Contenido sincronizado con la nube"), resetMs);
 }
 
 // ---------- Helpers ----------
@@ -351,3 +384,9 @@ document.body.appendChild(fab);
 
 // Init
 render();
+syncFromCloud();
+
+// Al volver a la pestaña, traer la última versión (lo que cargó el socio)
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && !editing) syncFromCloud();
+});
