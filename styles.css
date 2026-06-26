@@ -96,14 +96,14 @@ body {
   background: linear-gradient(135deg, var(--card), var(--card-2));
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 26px;
+  padding: 10px 14px;
   box-shadow: var(--shadow);
-  margin-bottom: 22px;
+  margin-bottom: 12px;
 }
-.hero .ic { font-size: 40px; }
-.hero h2 { margin: 8px 0 4px; font-size: 26px; }
-.hero .tagline { color: var(--accent-2); font-weight: 600; margin: 0 0 12px; }
-.hero p.desc { color: var(--muted); line-height: 1.6; margin: 0; max-width: 760px; }
+.hero .ic { font-size: 18px; }
+.hero h2 { margin: 2px 0 1px; font-size: 15px; }
+.hero .tagline { color: var(--accent-2); font-weight: 600; margin: 0 0 4px; font-size: 12px; }
+.hero p.desc { color: var(--muted); line-height: 1.4; margin: 0; max-width: 760px; font-size: 11.5px; }
 
 .grid {
   display: grid;
