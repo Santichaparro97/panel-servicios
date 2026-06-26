@@ -136,18 +136,33 @@ body {
 
 .ideal { color: var(--muted); line-height: 1.6; font-size: 14.5px; }
 
-/* Paquetes */
-.packs { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+/* Layout principal: contenido + columna de precios a la derecha */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 18px;
+  align-items: start;
+}
+.main-col { min-width: 0; }
+.price-col { position: sticky; top: 18px; }
+
+/* Paquetes en columna vertical */
+.packs-vert { display: flex; flex-direction: column; gap: 12px; }
 .pack {
   background: var(--card-2);
   border: 1px solid var(--line);
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px 16px;
   text-align: center;
 }
 .pack .p-name { font-weight: 600; }
-.pack .p-price { font-size: 22px; margin: 8px 0; color: var(--accent); }
+.pack .p-price { font-size: 22px; margin: 6px 0; color: var(--accent); }
 .pack .p-detail { color: var(--muted); font-size: 13px; }
+
+@media (max-width: 820px) {
+  .layout { grid-template-columns: 1fr; }
+  .price-col { position: static; }
+}
 
 /* ---------- Modal ---------- */
 .modal-overlay {

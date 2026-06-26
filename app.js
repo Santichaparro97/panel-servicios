@@ -98,22 +98,26 @@ function renderContent() {
       <p class="desc">${esc(s.descripcion || "")}</p>
     </section>
 
-    <div class="grid">
-      <div class="panel">
-        <h3>Beneficios</h3>
-        ${beneficios || '<p class="ideal">—</p>'}
+    <div class="layout">
+      <div class="main-col">
+        <div class="grid">
+          <div class="panel">
+            <h3>Beneficios</h3>
+            ${beneficios || '<p class="ideal">—</p>'}
+          </div>
+          <div class="panel">
+            <h3>Qué incluye</h3>
+            <ul class="list">${incluye || "<li>—</li>"}</ul>
+            <h3 style="margin-top:18px">Ideal para</h3>
+            <p class="ideal">${esc(s.idealPara || "—")}</p>
+          </div>
+        </div>
       </div>
-      <div class="panel">
-        <h3>Qué incluye</h3>
-        <ul class="list">${incluye || "<li>—</li>"}</ul>
-        <h3 style="margin-top:18px">Ideal para</h3>
-        <p class="ideal">${esc(s.idealPara || "—")}</p>
-      </div>
-    </div>
 
-    <div class="panel">
-      <h3>Paquetes / Precios</h3>
-      <div class="packs">${packs || '<p class="ideal">—</p>'}</div>
+      <aside class="panel price-col">
+        <h3>Paquetes / Precios</h3>
+        <div class="packs-vert">${packs || '<p class="ideal">—</p>'}</div>
+      </aside>
     </div>
   `;
 }
