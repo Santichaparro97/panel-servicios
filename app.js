@@ -91,33 +91,31 @@ function renderContent() {
     .join("");
 
   content.innerHTML = `
-    <section class="hero">
-      <div class="ic">${esc(s.icono || "•")}</div>
-      <h2>${esc(s.nombre)}</h2>
-      <p class="tagline">${esc(s.tagline || "")}</p>
-      <p class="desc">${esc(s.descripcion || "")}</p>
-    </section>
-
-    <div class="layout">
-      <div class="main-col">
-        <div class="grid">
-          <div class="panel">
-            <h3>Beneficios</h3>
-            ${beneficios || '<p class="ideal">—</p>'}
-          </div>
-          <div class="panel">
-            <h3>Qué incluye</h3>
-            <ul class="list">${incluye || "<li>—</li>"}</ul>
-            <h3 style="margin-top:18px">Ideal para</h3>
-            <p class="ideal">${esc(s.idealPara || "—")}</p>
-          </div>
-        </div>
-      </div>
+    <div class="top-row">
+      <section class="hero">
+        <div class="ic">${esc(s.icono || "•")}</div>
+        <h2>${esc(s.nombre)}</h2>
+        <p class="tagline">${esc(s.tagline || "")}</p>
+        <p class="desc">${esc(s.descripcion || "")}</p>
+      </section>
 
       <aside class="panel price-col">
         <h3>Paquetes / Precios</h3>
         <div class="packs-vert">${packs || '<p class="ideal">—</p>'}</div>
       </aside>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <h3>Beneficios</h3>
+        ${beneficios || '<p class="ideal">—</p>'}
+      </div>
+      <div class="panel">
+        <h3>Qué incluye</h3>
+        <ul class="list">${incluye || "<li>—</li>"}</ul>
+        <h3 style="margin-top:18px">Ideal para</h3>
+        <p class="ideal">${esc(s.idealPara || "—")}</p>
+      </div>
     </div>
   `;
 }
