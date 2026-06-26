@@ -60,6 +60,12 @@ body {
   font-weight: 600;
 }
 .btn-ghost { background: transparent; }
+.btn-link {
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, var(--accent-2), #2bbf94);
+  border-color: transparent; color: #06281f; font-weight: 600;
+}
 .btn.active { border-color: var(--accent-2); color: var(--accent-2); }
 
 /* ---------- Tabs ---------- */
