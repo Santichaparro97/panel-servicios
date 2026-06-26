@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Servicios</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <div>
+        <h1 id="brandName">Mis Servicios</h1>
+        <p id="brandSub">Panel comercial</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button id="btnEdit" class="btn btn-ghost">✏️ Editar</button>
+      <button id="btnExport" class="btn btn-ghost">⬇️ Exportar</button>
+      <button id="btnImport" class="btn btn-ghost">⬆️ Importar</button>
+      <input type="file" id="fileImport" accept="application/json" hidden />
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <main class="content" id="content"></main>
+
+  <!-- Modal de edición -->
+  <div class="modal-overlay" id="modal" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="modalTitle">Editar servicio</h2>
+        <button class="btn btn-ghost" id="btnCloseModal">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" id="btnCancel">Cancelar</button>
+        <button class="btn btn-primary" id="btnSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span id="saveState">Cambios guardados en este navegador</span>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
