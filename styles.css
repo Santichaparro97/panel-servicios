@@ -113,7 +113,7 @@ body {
 
 .grid {
   display: grid;
-  grid-template-columns: 2.5fr 1fr;
+  grid-template-columns: 1fr 280px;
   gap: 18px;
   margin-bottom: 22px;
 }
