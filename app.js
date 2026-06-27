@@ -102,10 +102,11 @@ function renderContent() {
 
   const beneficios = (s.beneficios || [])
     .map(
-      (b) => `
+      (b, i) => `
       <div class="benefit">
         <span class="b-ic">◆</span>
-        <div><b>${esc(b.titulo)}</b><span>${esc(b.detalle)}</span></div>
+        <div class="b-text"><b>${esc(b.titulo)}</b><span>${esc(b.detalle)}</span></div>
+        <button class="copy-btn" data-copyben="${i}" title="Copiar este beneficio">📋</button>
       </div>`
     )
     .join("");
@@ -140,7 +141,10 @@ function renderContent() {
 
     <div class="grid">
       <div class="panel">
-        <h3>Beneficios</h3>
+        <div class="panel-head">
+          <h3>Beneficios</h3>
+          <button class="copy-btn copy-all" data-copyall title="Copiar todos los beneficios">📋 Copiar todos</button>
+        </div>
         ${beneficios || '<p class="ideal">—</p>'}
       </div>
       <div class="panel">
@@ -151,6 +155,44 @@ function renderContent() {
       </div>
     </div>
   `;
+
+  wireCopy(s);
+}
+
+// Copiar beneficios al portapapeles
+function wireCopy(s) {
+  const fmt = (b) => `• ${b.titulo}: ${b.detalle}`;
+
+  $("#content")
+    .querySelectorAll("[data-copyben]")
+    .forEach((btn) =>
+      btn.addEventListener("click", () => {
+        const b = s.beneficios[+btn.dataset.copyben];
+        copyText(fmt(b), btn);
+      })
+    );
+
+  const all = $("#content").querySelector("[data-copyall]");
+  if (all)
+    all.addEventListener("click", () => {
+      const txt = (s.beneficios || []).map(fmt).join("\n");
+      copyText(txt, all, "📋 Copiar todos");
+    });
+}
+
+function copyText(text, btn, restore = "📋") {
+  navigator.clipboard.writeText(text).then(
+    () => {
+      const original = btn.textContent;
+      btn.textContent = restore.includes("todos") ? "✓ Copiado" : "✓";
+      btn.classList.add("copied");
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove("copied");
+      }, 1200);
+    },
+    () => alert("No se pudo copiar")
+  );
 }
 
 function render() {
@@ -333,45 +375,9 @@ function closeModal() {
 }
 
 // ============================================================
-//  Export / Import
-// ============================================================
-function exportJSON() {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "panel-servicios.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-function importJSON(file) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!data.servicios) throw new Error("Formato inválido");
-      state = data;
-      activeId = state.servicios[0]?.id || null;
-      save();
-      render();
-      alert("Datos importados correctamente.");
-    } catch (err) {
-      alert("No se pudo importar: " + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-// ============================================================
 //  Eventos
 // ============================================================
 $("#btnEdit").addEventListener("click", toggleEdit);
-$("#btnExport").addEventListener("click", exportJSON);
-$("#btnImport").addEventListener("click", () => $("#fileImport").click());
-$("#fileImport").addEventListener("change", (e) => {
-  if (e.target.files[0]) importJSON(e.target.files[0]);
-  e.target.value = "";
-});
 $("#btnCloseModal").addEventListener("click", closeModal);
 $("#btnCancel").addEventListener("click", closeModal);
 
